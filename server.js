@@ -1,6 +1,7 @@
 //import dependencies
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
+const cTable = require("console.table")
 
 // Connect to database
 const db = mysql.createConnection({
@@ -36,10 +37,10 @@ function init() {
             //console.log(option);
             switch (option) {
                 case "view all departments":
-                    //do some work
+                    viewAllDepartments();
                     break;
                 case "view all roles":
-                    //do some work
+                    viewAllRoles();
                     break;
                 case "view all employees":
                     //do some work
@@ -72,7 +73,36 @@ function init() {
 
 
 function viewAllDepartments() {
+    const allDepartments = "SELECT id, name AS department FROM department";
+    db.query(allDepartments, (error, results) => {
+        console.table(results);
+    });
+}
 
+function getAllDepartments() {
+    const allDepartments = "SELECT id, name AS department FROM department";
+    let departments;
+    db.query(allDepartments, (error, results) => {
+        //console.log(results);
+        departments = cTable.getTable(results); 
+        console.log(departments);
+    });
+    return departments;
+}
+
+function viewAllRoles() {
+    const allRoles = `SELECT role.id, role.title, role.department_id AS department, role.salary 
+                        FROM role 
+                        JOIN department ON role.department_id = department.id ORDER BY department.name`;
+    db.query(allRoles, (error, results) => {
+        console.table(results);
+        const departments = getAllDepartments();
+        console.log(departments);
+        const newTable = results.map((element) => {
+            
+        });
+        error ? console.log(error) : null;
+    });
 }
 
 init();
