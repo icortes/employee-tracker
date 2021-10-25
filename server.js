@@ -1,7 +1,8 @@
 //import dependencies
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const cTable = require("console.table")
+const cTable = require("console.table");
+const util = require("util");
 
 // Connect to database
 const db = mysql.createConnection({
@@ -14,6 +15,8 @@ const db = mysql.createConnection({
     },
     console.log(`Connected to the company_db database.`)
 );
+
+const queryPromise = util.promisify(db.query).bind(db);
 
 function init() {
     inquirer.prompt([{
@@ -59,7 +62,8 @@ function init() {
                     break;
                 case "QUIT":
                     //stop the program
-                    break;
+                    console.log("App successfully exited");
+                    process.exit();
                 default:
                     console.log("this is not an option");
                     break;
@@ -79,29 +83,22 @@ function viewAllDepartments() {
     });
 }
 
-function getAllDepartments() {
+async function getAllDepartments() {
     const allDepartments = "SELECT id, name AS department FROM department";
-    let departments;
-    db.query(allDepartments, (error, results) => {
-        //console.log(results);
-        departments = cTable.getTable(results); 
-        console.log(departments);
-    });
+    const departments = await queryPromise(allDepartments);
     return departments;
 }
 
-function viewAllRoles() {
+async function viewAllRoles() {
     const allRoles = `SELECT role.id, role.title, role.department_id AS department, role.salary 
                         FROM role 
                         JOIN department ON role.department_id = department.id ORDER BY department.name`;
-    db.query(allRoles, (error, results) => {
-        console.table(results);
-        const departments = getAllDepartments();
-        console.log(departments);
-        const newTable = results.map((element) => {
-            
-        });
-        error ? console.log(error) : null;
+    const roles = await queryPromise(allRoles);
+    console.table(roles);
+    const departments = await getAllDepartments();
+    console.log(departments);
+    const newTable = roles.map((element) => {
+        
     });
 }
 
