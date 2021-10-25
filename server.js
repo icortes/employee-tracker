@@ -52,7 +52,7 @@ function init() {
                     viewAllEmployees();
                     break;
                 case "add a department":
-                    // do some work
+                    addDepartment();
                     break;
                 case "add a role":
                     //do some work
@@ -164,6 +164,21 @@ async function viewAllEmployees() {
         }
     })
     console.table(employees);
+}
+
+// adds department to database
+async function addDepartment() {
+    inquirer.prompt([{
+            type: 'input',
+            name: 'newDepartment',
+            message: 'Enter new department name: ',
+            required: true
+        }])
+        .then(response => {
+            const addDepartment = `INSERT INTO department (name) VALUES (?)`;
+            db.query(addDepartment, response.newDepartment);
+            console.log(`Added ${response.newDepartment} to the database`);
+        })
 }
 
 init();
