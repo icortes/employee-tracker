@@ -94,12 +94,20 @@ async function viewAllRoles() {
                         FROM role 
                         JOIN department ON role.department_id = department.id ORDER BY department.name`;
     const roles = await queryPromise(allRoles);
-    console.table(roles);
+    //console.table(roles);
     const departments = await getAllDepartments();
-    console.log(departments);
-    const newTable = roles.map((element) => {
-        
+    //console.log(departments);
+    roles.forEach((element) => {
+        //console.log(element);
+        for (let i = 0; i < departments.length; i++) {
+            if(departments[i].id === element.department){
+                element.department = departments[i].department;
+                //console.log(element.department);
+            }
+        }
+        //console.log(element.department);
     });
+    console.table(roles);
 }
 
 init();
