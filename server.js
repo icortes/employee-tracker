@@ -16,9 +16,12 @@ const db = mysql.createConnection({
     console.log(`Connected to the company_db database.`)
 );
 
+//promisify db.query
 const queryPromise = util.promisify(db.query).bind(db);
 
+//function that executes when starting app
 function init() {
+    //ask the user what they'd like to do
     inquirer.prompt([{
             type: "list",
             name: "option",
@@ -35,9 +38,9 @@ function init() {
             ]
         }])
         .then(response => {
-
+            //store the response in a variable
             const option = response.option;
-            //console.log(option);
+            //switch statement for all the available options the user has
             switch (option) {
                 case "view all departments":
                     viewAllDepartments();
