@@ -55,7 +55,7 @@ function init() {
                     addDepartment();
                     break;
                 case "add a role":
-                    //do some work
+                    addRole();
                     break;
                 case "add an employee":
                     //do some work
@@ -72,6 +72,9 @@ function init() {
                     break;
 
             }
+        })
+        .then((res) => {
+            //init();
         })
         .catch((error) => {
             error ? console.log(error) : null;
@@ -178,6 +181,48 @@ async function addDepartment() {
             const addDepartment = `INSERT INTO department (name) VALUES (?)`;
             db.query(addDepartment, response.newDepartment);
             console.log(`Added ${response.newDepartment} to the database`);
+        })
+}
+
+async function getDepartmentNames() {
+    const departments = await getAllDepartments();
+    const departmentNameArray = [];
+    departments.forEach(element => {
+        departmentNameArray.push(element.department);
+    })
+    return departmentNameArray;
+
+}
+
+//adds role to the database
+async function addRole() {
+    let departmentArray = await getDepartmentNames();
+
+    console.log(departmentArray);
+    const questions = [{
+            type: 'input',
+            name: 'newRole',
+            message: 'Enter new role name: ',
+            required: true
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'Enter salary of role: ',
+            required: true
+        },
+        {
+            type: 'list',
+            name: 'newRole',
+            message: 'Select department for the role: ',
+            choices: ["Sales", "Engineering"],
+        }
+    ]
+    inquirer.prompt(questions)
+        .then(response => {
+            const addRole = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+            //db.query(addRole, [ /*title, salary, department_id*/ ]);
+            console.log(`Added ${response.title} to the database`);
         })
 }
 
