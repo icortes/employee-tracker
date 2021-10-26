@@ -58,6 +58,7 @@ function init() {
                     addRole();
                     break;
                 case "add an employee":
+                    addEmployee();
                     //do some work
                     break;
                 case "update an employee role":
@@ -167,6 +168,7 @@ async function viewAllEmployees() {
         }
     })
     console.table(employees);
+    return (employees);
 }
 
 // adds department to database
@@ -199,30 +201,85 @@ async function addRole() {
     let departmentArray = await getDepartmentNames();
 
     console.log(departmentArray);
-    const questions = [{
-            type: 'input',
-            name: 'newRole',
-            message: 'Enter new role name: ',
-            required: true
-        },
-        {
-            type: 'input',
-            name: 'salary',
-            message: 'Enter salary of role: ',
-            required: true
-        },
-        {
-            type: 'list',
-            name: 'newRole',
-            message: 'Select department for the role: ',
-            choices: ["Sales", "Engineering"],
-        }
-    ]
-    inquirer.prompt(questions)
+    inquirer.prompt([{
+                type: 'input',
+                name: 'newRole',
+                message: 'Enter new role name: ',
+                required: true
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'Enter salary of role: ',
+                required: true
+            },
+            {
+                type: 'list',
+                name: 'newRole',
+                message: 'Select department for the role: ',
+                choices: departmentArray,
+            }
+        ])
         .then(response => {
             const addRole = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
             //db.query(addRole, [ /*title, salary, department_id*/ ]);
             console.log(`Added ${response.title} to the database`);
+        })
+}
+
+async function getRoleArray() {
+    const roles = await getRoles();
+    let roleArray = [];
+    roles.forEach(element => {
+        roleArray.push(element.title);
+    });
+    return roleArray;
+}
+
+async function getManagerArray() {
+    const employees = await viewAllEmployees();
+    let managers = [];
+    employees.forEach(element => {
+        if (element.manager_id === null) {
+            managers.push(`${element.first_name} ${element.last_name}`)
+        }
+    });
+    return managers;
+}
+
+async function addEmployee() {
+    const roles = await getRoleArray();
+    const managers = await getManagerArray();
+    console.log(roles);
+    inquirer.prompt([{
+                type: "input",
+                name: "first_name",
+                message: "Enter employee's first name:",
+                require: true,
+            },
+            {
+                type: "input",
+                name: "last_name",
+                message: "Enter employee's last name:",
+                require: true,
+            },
+            {
+                type: "list",
+                name: "role",
+                message: "Enter employee's role:",
+                choices: roles,
+                require: true,
+            },
+            {
+                type: "list",
+                name: "manager",
+                message: "Enter employee's manager:",
+                choices: managers,
+                require: true,
+            },
+        ])
+        .then((response) => {
+            console.log(response);
         })
 }
 
