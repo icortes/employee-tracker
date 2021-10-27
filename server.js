@@ -59,7 +59,6 @@ function init() {
                     break;
                 case "add an employee":
                     addEmployee();
-                    //do some work
                     break;
                 case "update an employee role":
                     //do some work
@@ -73,9 +72,6 @@ function init() {
                     break;
 
             }
-        })
-        .then((res) => {
-            //init();
         })
         .catch((error) => {
             error ? console.log(error) : null;
@@ -279,7 +275,6 @@ async function addEmployee() {
             },
         ])
         .then((response) => {
-            console.log(response);
         })
 }
 
