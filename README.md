@@ -4,7 +4,7 @@
 
 [![image of webpage when it's generated](./assets/images/Screenshot.jpg)](https://watch.screencastify.com/v/wBF46MOQeXYhJPuMURU8)
 
-CLICK ON THE IMAGE TO SEE A DEMO
+[*CLICK ON THE IMAGE OR HERE TO SEE A DEMO*](https://watch.screencastify.com/v/wBF46MOQeXYhJPuMURU8)
 
 ## Getting Started
 
