@@ -54,7 +54,7 @@ You will also need a github account. Get one [here](https://github.com/).
         npm start
 
 
-    Click [here]() to see the app in action.
+    [Click here to see the app in action.](https://watch.screencastify.com/v/wBF46MOQeXYhJPuMURU8)
 
 
 ## Built With
